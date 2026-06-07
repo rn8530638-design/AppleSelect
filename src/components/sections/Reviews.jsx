@@ -16,15 +16,22 @@ export default function Reviews() {
   const [isPaused, setIsPaused] = useState(false)
   const animationRef = useRef(null)
 
-  // Auto-scroll via rAF + transform on inner div
+  // Auto-scroll via rAF + transform on inner div.
+  // scrollWidth is measured once (and on resize) rather than every frame — reading
+  // a layout property inside the rAF loop forces a synchronous reflow per tick.
+  // The loop now only writes (transform), never reads layout.
   useEffect(() => {
     const inner = innerRef.current
     if (!inner) return
 
+    let halfWidth = inner.scrollWidth / 2
+    const measure = () => { halfWidth = inner.scrollWidth / 2 }
+    window.addEventListener('resize', measure)
+
     const scroll = () => {
       if (!isPaused) {
         posRef.current -= 0.4
-        if (-posRef.current >= inner.scrollWidth / 2) {
+        if (-posRef.current >= halfWidth) {
           posRef.current = 0
         }
         inner.style.transform = `translateX(${posRef.current}px)`
@@ -33,7 +40,10 @@ export default function Reviews() {
     }
 
     animationRef.current = requestAnimationFrame(scroll)
-    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current) }
+    return () => {
+      window.removeEventListener('resize', measure)
+      if (animationRef.current) cancelAnimationFrame(animationRef.current)
+    }
   }, [isPaused])
 
   // Mouse drag
