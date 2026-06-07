@@ -89,7 +89,12 @@ export default function Hero() {
           transition={{ delay: 0.7, type: 'spring', stiffness: 260, damping: 18 }}
           style={{ willChange: 'transform, opacity' }}
         >
-          <Button variant="white" href="#showcase">
+          <Button
+            variant="white"
+            href="https://t.me/appleselect69"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {hero.cta}
           </Button>
         </motion.div>

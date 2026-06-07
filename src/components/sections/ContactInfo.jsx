@@ -38,6 +38,8 @@ export default function ContactInfo() {
         <motion.a
           className="btn btn--blue"
           href={cta.href}
+          target="_blank"
+          rel="noopener noreferrer"
           variants={fadeInUp}
           whileHover={isMobile ? undefined : { scale: 1.02 }}
           whileTap={isMobile ? undefined : { scale: 0.98 }}

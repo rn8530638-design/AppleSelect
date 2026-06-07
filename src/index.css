@@ -174,7 +174,7 @@ a { text-decoration: none; color: inherit; }
 @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(8px);} }
 
 /* ============ SHOWCASE ============ */
-.showcase { background: var(--black); position: relative; }
+.showcase { background: #1a1a1a; position: relative; }
 .showcase__viewport { overflow: hidden; }
 .showcase__track { display: flex; }
 .slide {
@@ -184,7 +184,7 @@ a { text-decoration: none; color: inherit; }
   gap: 0;
 }
 .slide__text { padding: clamp(48px, 7vw, 110px) clamp(28px, 6vw, 96px); display: flex; flex-direction: column; justify-content: center; border: none; outline: none; margin: 0; position: relative; z-index: 1; }
-.slide__text::after { content: ''; position: absolute; top: 0; right: -2px; width: 4px; height: 100%; background: #0a0a0a; pointer-events: none; }
+.slide__text::after { content: ''; position: absolute; top: 0; right: -2px; width: 4px; height: 100%; background: #1a1a1a; pointer-events: none; }
 .slide__index { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 26px; }
 .slide__index .bar { width: 56px; height: 1px; background: var(--line); position: relative; }
 .slide__index .bar::before { content:""; position:absolute; left:0; top:0; height:1px; width:var(--p,33%); background:#ffffff; transition: width .7s ease; }
@@ -205,7 +205,7 @@ a { text-decoration: none; color: inherit; }
 .slide__price .val { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
 .slide__price .from { color: var(--muted); font-size: 14px; }
 
-.slide__photo { position: relative; overflow: hidden; border: none; outline: none; margin: 0; background: #0a0a0a; }
+.slide__photo { position: relative; overflow: hidden; border: none; outline: none; margin: 0; background: #1a1a1a; }
 .slide__photo .pic { position: absolute; inset: 0; }
 .slide__photo .pic::before {
   content: ""; position: absolute; inset: 0;
@@ -221,7 +221,7 @@ a { text-decoration: none; color: inherit; }
 }
 .slide__photo .fade {
   position: absolute; inset: 0; z-index: 2;
-  background: linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0.86) 14%, rgba(10,10,10,0.25) 36%, transparent 58%);
+  background: linear-gradient(90deg, #1a1a1a 0%, rgba(26,26,26,0.86) 14%, rgba(26,26,26,0.25) 36%, transparent 58%);
   pointer-events: none;
 }
 .slide__photo .tag {
@@ -232,7 +232,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* carousel controls */
-.showcase__bar { display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(28px, 6vw, 96px) 64px; background: var(--black); }
+.showcase__bar { display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(28px, 6vw, 96px) 64px; background: #1a1a1a; }
 .ctrls { display: flex; gap: 14px; align-items: center; }
 .arrow {
   width: 52px; height: 52px; border-radius: 50%; border: 1px solid #3a3a3a; background: transparent;
@@ -244,7 +244,7 @@ a { text-decoration: none; color: inherit; }
 .dots { display: flex; gap: 9px; margin-left: 8px; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.24); cursor: pointer; transition: all .3s ease; border: none; padding: 0; }
 .dot.active { background: #ffffff; width: 22px; border-radius: 50px; }
-.swipe-hint { color: var(--muted); font-style: italic; font-size: 15px; }
+.swipe-hint { color: var(--muted); font-style: italic; font-size: 20px; }
 
 /* ============ SECTION SHELL ============ */
 .section { padding: clamp(72px, 11vw, 150px) clamp(24px, 6vw, 96px); }
@@ -310,7 +310,7 @@ footer { background: var(--black); color: rgba(255,255,255,0.34); text-align: ce
   .nav__links { gap: 18px; }
   .slide { grid-template-columns: 1fr; min-height: auto; }
   .slide__photo { min-height: 340px; order: -1; }
-  .slide__photo .fade { background: linear-gradient(0deg, #0a0a0a 0%, rgba(10,10,10,0.65) 14%, transparent 46%); }
+  .slide__photo .fade { background: linear-gradient(0deg, #1a1a1a 0%, rgba(26,26,26,0.65) 14%, transparent 46%); }
   .slide__specs { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {

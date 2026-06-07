@@ -129,7 +129,7 @@ export const cta = {
   title: ['Оригинальная техника —', 'оригинальный подход'],
   text: 'Подпишитесь на канал, чтобы первыми узнавать о наличии, ценах и закрытых предложениях на технику Apple.',
   button: 'Перейти в Telegram',
-  href: 'https://t.me/sowil69',
+  href: 'https://t.me/appleselect69',
 }
 
 export const footerText =
