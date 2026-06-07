@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#0a0a0a" />
+
+    <!-- Prerender flash guard. The prerendered HTML is the mobile layout; on
+         desktop the client mounts a fullscreen black intro video. Without this,
+         the browser would paint the baked mobile content for a frame before the
+         intro covers it. We hide #root on desktop (>=769px) until the app marks
+         itself ready (adds .js-ready after React commits) — so the first paint is
+         the same black as the intro, never the baked content. Crawlers read the
+         DOM regardless of visibility, so SEO is unaffected. Mobile has no intro,
+         so the guard never applies there. -->
+    <style>
+      @media (min-width: 769px) {
+        html:not(.js-ready) { background: #000; }
+        html:not(.js-ready) #root { visibility: hidden; }
+      }
+    </style>
+    <noscript><style>#root { visibility: visible !important; }</style></noscript>
+
+    <!-- Primary meta -->
+    <title>Apple Select — оригинальная техника Apple с гарантией</title>
+    <meta
+      name="description"
+      content="Apple Select — продажа оригинальной техники Apple (iPhone, AirPods, Apple Watch, MacBook) с официальной гарантией 1 год и честным подходом. Доставка по России."
+    />
+    <link rel="canonical" href="https://appleselect.shop/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Apple Select" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content="Apple Select — оригинальная техника Apple с гарантией" />
+    <meta
+      property="og:description"
+      content="Оригинальная техника Apple с официальной гарантией 1 год и честным подходом. Доставка по России."
+    />
+    <meta property="og:url" content="https://appleselect.shop/" />
+    <meta property="og:image" content="https://appleselect.shop/Site.png" />
+    <meta property="og:image:width" content="1892" />
+    <meta property="og:image:height" content="1080" />
+    <meta property="og:image:alt" content="Apple Select — оригинальная техника Apple" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Apple Select — оригинальная техника Apple с гарантией" />
+    <meta
+      name="twitter:description"
+      content="Оригинальная техника Apple с официальной гарантией и доставкой по России."
+    />
+    <meta name="twitter:image" content="https://appleselect.shop/Site.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Structured data: Store + WebSite. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Store",
+          "@id": "https://appleselect.shop/#store",
+          "name": "Apple Select",
+          "description": "Продажа оригинальной техники Apple с официальной гарантией и доставкой по России.",
+          "url": "https://appleselect.shop/",
+          "image": "https://appleselect.shop/Site.png",
+          "telephone": "+79056000038",
+          "email": "sergei.sowil.393@gmail.com",
+          "priceRange": "₽₽₽",
+          "areaServed": { "@type": "Country", "name": "Россия" },
+          "sameAs": ["https://t.me/sowil69"]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://appleselect.shop/#website",
+          "url": "https://appleselect.shop/",
+          "name": "Apple Select",
+          "inLanguage": "ru-RU",
+          "publisher": { "@id": "https://appleselect.shop/#store" }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Product structured data (5 products). Prices are "starting from".
+         No aggregateRating — no per-product review data. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Product",
+          "name": "iPhone 15 Pro",
+          "description": "Титановый корпус, чип A17 Pro и система камер профессионального уровня. Самый мощный iPhone в линейке.",
+          "image": "https://appleselect.shop/images/iphone.webp",
+          "brand": { "@type": "Brand", "name": "Apple" },
+          "offers": {
+            "@type": "Offer",
+            "price": "74490",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@id": "https://appleselect.shop/#store" }
+          }
+        },
+        {
+          "@type": "Product",
+          "name": "AirPods Max",
+          "description": "Наушники полностью переосмыслены. От амбушюр до оголовья — точная посадка и полное погружение в звук.",
+          "image": "https://appleselect.shop/images/airpods.webp",
+          "brand": { "@type": "Brand", "name": "Apple" },
+          "offers": {
+            "@type": "Offer",
+            "price": "41490",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@id": "https://appleselect.shop/#store" }
+          }
+        },
+        {
+          "@type": "Product",
+          "name": "Apple Watch Ultra",
+          "description": "Самые прочные и функциональные часы Apple. Титановый корпус, точный GPS и автономность до 36 часов.",
+          "image": "https://appleselect.shop/images/watch.webp",
+          "brand": { "@type": "Brand", "name": "Apple" },
+          "offers": {
+            "@type": "Offer",
+            "price": "66490",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@id": "https://appleselect.shop/#store" }
+          }
+        },
+        {
+          "@type": "Product",
+          "name": "AirPods Pro 2",
+          "description": "Полное погружение в звук с активным шумоподавлением нового поколения. Прозрачный режим, адаптивный звук и до 30 часов автономной работы с кейсом.",
+          "image": "https://appleselect.shop/images/airpods-pro.webp",
+          "brand": { "@type": "Brand", "name": "Apple" },
+          "offers": {
+            "@type": "Offer",
+            "price": "21490",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@id": "https://appleselect.shop/#store" }
+          }
+        },
+        {
+          "@type": "Product",
+          "name": "MacBook Pro 14\"",
+          "description": "Профессиональная мощь чипа M3 Pro и дисплей Liquid Retina XDR. Создан для самых требовательных задач — от монтажа видео до разработки.",
+          "image": "https://appleselect.shop/images/macbook.webp",
+          "brand": { "@type": "Brand", "name": "Apple" },
+          "offers": {
+            "@type": "Offer",
+            "price": "165990",
+            "priceCurrency": "RUB",
+            "availability": "https://schema.org/InStock",
+            "seller": { "@id": "https://appleselect.shop/#store" }
+          }
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
