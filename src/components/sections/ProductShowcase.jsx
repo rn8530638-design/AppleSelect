@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import ProductCard from '../ui/ProductCard'
 import { products } from '../../data/content'
+import useIsMobile from '../../hooks/useIsMobile'
 
 // Sliding-track carousel (faithful to the original translateX track):
 // useState drives the index, Framer Motion animates the track x with the
 // same easing. Dots, prev/next (disabled at ends) and touch-swipe preserved.
 // The active + in-view slide drives its card's reveal animations.
 export default function ProductShowcase() {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+  const isMobile = useIsMobile()
   const [cur, setCur] = useState(0)
   const total = products.length
   const startX = useRef(0)

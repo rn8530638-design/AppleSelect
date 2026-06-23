@@ -28,12 +28,6 @@ export default defineConfig({
         renderedRoute.html = renderedRoute.html
           .replace(/\s+class="js-ready"/g, '')
           .replace('<head>', '<head>\n    <meta name="prerendered" content="true" />')
-          // Puppeteer runs the font link's onload during prerender, flipping
-          // rel="preload" -> rel="stylesheet" and baking it into the static HTML
-          // as a render-blocking sheet. Restore the non-blocking preload form
-          // (the as="style" attribute uniquely marks the font link; the app CSS
-          // bundle has no `as`). The onload handler re-flips it in the browser.
-          .replace('rel="stylesheet" as="style"', 'rel="preload" as="style"')
         return renderedRoute
       },
       renderer: new Renderer({

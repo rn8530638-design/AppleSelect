@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { cta } from '../../data/content'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 28 },
@@ -8,7 +9,7 @@ const fadeInUp = {
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.05 } } }
 
 export default function ContactInfo() {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+  const isMobile = useIsMobile()
   return (
     <section className="cta" id="cta" data-screen-label="cta">
       <div className="cta__glow" aria-hidden="true" />

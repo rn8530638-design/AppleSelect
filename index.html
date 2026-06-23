@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="theme-color" content="#0a0a0a" />
-    <meta name="google-site-verification" content="f17b23c09784c587" />
 
     <!-- Prerender flash guard. The prerendered HTML is the mobile layout; on
          desktop the client mounts a fullscreen black intro video. Without this,
@@ -58,21 +57,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Fonts are non-critical: load them without blocking first paint. The hero
-         <h1> (LCP element) paints immediately in the system fallback thanks to
-         display=swap, then upgrades to Syne once the sheet arrives. -->
     <link
-      rel="preload"
-      as="style"
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
+      rel="stylesheet"
     />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
-      />
-    </noscript>
 
     <!-- Structured data: Store + WebSite. -->
     <script type="application/ld+json">
@@ -183,8 +171,36 @@
       ]
     }
     </script>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+       (function(m,e,t,r,i,k,a){
+         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+         m[i].l=1*new Date();
+         k=e.createElement(t),a=e.getElementsByTagName(t)[0],
+         k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+       ym(109709917, 'init', {
+         ssr: true,
+         webvisor: true,
+         clickmap: true,
+         ecommerce: "dataLayer",
+         referrer: document.referrer,
+         url: location.href,
+         accurateTrackBounce: true,
+         trackLinks: true
+       });
+    </script>
+    <!-- /Yandex.Metrika counter -->
   </head>
   <body>
+    <!-- Yandex.Metrika noscript fallback — must live in <body>, not <head> -->
+    <noscript>
+      <div>
+        <img src="https://mc.yandex.ru/watch/109709917"
+             style="position:absolute; left:-9999px;"
+             alt="" />
+      </div>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

@@ -75,7 +75,56 @@ a { text-decoration: none; color: inherit; }
   transition: color .25s ease;
 }
 .nav__links a:hover { color: #fff; }
-.nav__burger { display: none; }
+
+/* Burger — hidden on desktop, revealed ≤720px. Three bars morph into an X. */
+.nav__burger {
+  display: none;
+  width: 44px; height: 44px;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px;
+  background: transparent; border: none; cursor: pointer;
+  padding: 0; margin: -8px -10px -8px 0; /* widen tap target, keep visual size */
+  position: relative; z-index: 110;
+}
+.nav__burger span {
+  display: block; width: 24px; height: 2px; border-radius: 2px; background: #fff;
+  transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .2s ease;
+}
+.nav__burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav__burger.open span:nth-child(2) { opacity: 0; }
+.nav__burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ============ MOBILE MENU OVERLAY ============ */
+.mobile-menu {
+  /* Sits below the nav (z-index 100) so the logo + burger-X stay on top and
+     the menu can be dismissed by tapping the X. */
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: saturate(180%) blur(22px);
+  -webkit-backdrop-filter: saturate(180%) blur(22px);
+  display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top, 0px) + 104px)
+           clamp(28px, 8vw, 48px)
+           calc(env(safe-area-inset-bottom, 0px) + 40px);
+}
+.mobile-menu__links { display: flex; flex-direction: column; }
+.mobile-menu__links button {
+  appearance: none; background: transparent; border: none; cursor: pointer;
+  text-align: left; width: 100%;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 9vw, 46px); font-weight: 700; letter-spacing: -0.02em;
+  color: #fff; padding: 18px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: color .25s ease, padding-left .25s ease;
+}
+.mobile-menu__links button:active { color: var(--muted); padding-left: 6px; }
+.mobile-menu__cta {
+  margin-top: auto;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  background: #fff; color: #000; border-radius: var(--pill);
+  font-family: var(--font-body); font-weight: 600; font-size: 17px;
+  padding: 18px 32px;
+}
 
 /* ============ HERO ============ */
 .hero {
@@ -174,7 +223,7 @@ a { text-decoration: none; color: inherit; }
 @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(8px);} }
 
 /* ============ SHOWCASE ============ */
-.showcase { background: #1a1a1a; position: relative; }
+.showcase { background: #0a0a0a; position: relative; }
 .showcase__viewport { overflow: hidden; }
 .showcase__track { display: flex; }
 .slide {
@@ -184,7 +233,7 @@ a { text-decoration: none; color: inherit; }
   gap: 0;
 }
 .slide__text { padding: clamp(48px, 7vw, 110px) clamp(28px, 6vw, 96px); display: flex; flex-direction: column; justify-content: center; border: none; outline: none; margin: 0; position: relative; z-index: 1; }
-.slide__text::after { content: ''; position: absolute; top: 0; right: -2px; width: 4px; height: 100%; background: #1a1a1a; pointer-events: none; }
+.slide__text::after { content: ''; position: absolute; top: 0; right: -2px; width: 4px; height: 100%; background: #0a0a0a; pointer-events: none; }
 .slide__index { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 14px; font-weight: 600; letter-spacing: 0.04em; margin-bottom: 26px; }
 .slide__index .bar { width: 56px; height: 1px; background: var(--line); position: relative; }
 .slide__index .bar::before { content:""; position:absolute; left:0; top:0; height:1px; width:var(--p,33%); background:#ffffff; transition: width .7s ease; }
@@ -205,7 +254,20 @@ a { text-decoration: none; color: inherit; }
 .slide__price .val { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
 .slide__price .from { color: var(--muted); font-size: 14px; }
 
-.slide__photo { position: relative; overflow: hidden; border: none; outline: none; margin: 0; background: #1a1a1a; }
+/* ============ RESPONSIVE SLIDE (.product-*) ============
+   Layout for the carousel slide lives here (not inline in ProductCard) so it is
+   continuously responsive via relative units and overridable per breakpoint.
+   Base = desktop split row; the photo box (.product-right) flexes to fill the
+   panel and the image inside always covers it, so resizing the viewport resizes
+   the image with no fixed pixel heights. Stacking is handled in the media
+   queries in the RESPONSIVE section below. (.product-section also carries the
+   .slide class, whose min-width:100% keeps the carousel track aligned.) */
+.product-section { flex-direction: row; width: 100%; height: 100vh; min-height: 600px; }
+.product-left { width: clamp(300px, 45%, 650px); flex-shrink: 0; }
+.product-right { flex: 1; height: 100%; }
+.product-title { font-size: clamp(2.5rem, 5vw, 4rem); }
+
+.slide__photo { position: relative; overflow: hidden; border: none; outline: none; margin: 0; background: #0a0a0a; }
 .slide__photo .pic { position: absolute; inset: 0; }
 .slide__photo .pic::before {
   content: ""; position: absolute; inset: 0;
@@ -221,7 +283,7 @@ a { text-decoration: none; color: inherit; }
 }
 .slide__photo .fade {
   position: absolute; inset: 0; z-index: 2;
-  background: linear-gradient(90deg, #1a1a1a 0%, rgba(26,26,26,0.86) 14%, rgba(26,26,26,0.25) 36%, transparent 58%);
+  background: linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0.86) 14%, rgba(10,10,10,0.25) 36%, transparent 58%);
   pointer-events: none;
 }
 .slide__photo .tag {
@@ -232,7 +294,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* carousel controls */
-.showcase__bar { display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(28px, 6vw, 96px) 64px; background: #1a1a1a; }
+.showcase__bar { display: flex; align-items: center; justify-content: space-between; padding: 26px clamp(28px, 6vw, 96px) 64px; background: #0a0a0a; }
 .ctrls { display: flex; gap: 14px; align-items: center; }
 .arrow {
   width: 52px; height: 52px; border-radius: 50%; border: 1px solid #3a3a3a; background: transparent;
@@ -308,13 +370,12 @@ footer { background: var(--black); color: rgba(255,255,255,0.34); text-align: ce
 /* ============ RESPONSIVE ============ */
 @media (max-width: 880px) {
   .nav__links { gap: 18px; }
-  .slide { grid-template-columns: 1fr; min-height: auto; }
-  .slide__photo { min-height: 340px; order: -1; }
-  .slide__photo .fade { background: linear-gradient(0deg, #1a1a1a 0%, rgba(26,26,26,0.65) 14%, transparent 46%); }
+  /* Slide stacking is handled by the .product-* media queries below. */
   .slide__specs { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
-  .nav__links a:not(.nav__cta) { display: none; }
+  .nav__links { display: none; }
+  .nav__burger { display: flex; }
   .about__grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: 1fr 1fr; }
   .swipe-hint { display: none; }
@@ -323,6 +384,67 @@ footer { background: var(--black); color: rgba(255,255,255,0.34); text-align: ce
   .stats { grid-template-columns: 1fr; }
   .stats .stat:first-child { grid-column: auto; }
   .slide__specs { grid-template-columns: 1fr; }
+}
+
+/* ============ IPAD / TABLET (769–1024px) ============ */
+/* Layered on top of the desktop styles. Does NOT touch ≤768 (mobile) or
+   ≥1025 (desktop). The carousel itself stacks via ProductCard's inline styles
+   (photo on top, height-capped); here we relax the surrounding chrome so the
+   narrower landscape/portrait tablet viewport isn't crowded and nothing
+   overflows. About keeps its 2-column desktop grid (the base rule already
+   applies in this range). */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Nav — tighter bar, smaller links */
+  .nav { padding-left: 32px; padding-right: 32px; }
+  .nav__links { gap: 24px; }
+  .nav__links a { font-size: 14px; }
+
+  /* Hero — smaller headline, tighter side padding */
+  .hero__inner { padding: 0 40px; }
+  .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
+
+  /* Showcase — slide layout/padding handled by the .product-* queries below;
+     only the carousel control bar needs its side padding trimmed here. */
+  .showcase__bar { padding-left: 40px; padding-right: 40px; }
+
+  /* Sections (About / CTA) — reduce the generous desktop padding */
+  .section { padding: 80px 40px; }
+  .cta { padding: 80px 40px; }
+
+  /* Reviews — smaller cards so more of the rail is visible */
+  .reviews__head { padding-left: 40px; padding-right: 40px; }
+  .reviews__rail { padding-left: 40px; padding-right: 40px; }
+  .rcard { min-width: 280px; }
+}
+
+/* ============ RESPONSIVE SLIDE STACKING (.product-*) ============
+   Image is sized with viewport-relative heights (vw) + min/max caps so it scales
+   continuously across every width — no fixed pixel heights. Order: the ≤1024
+   stack rule comes first, the landscape override after it (so it wins), then the
+   phone rule. The JS `stacked` flag in ProductCard mirrors these exact queries. */
+
+/* iPad portrait and narrower — stack, image on top. Taller box than a cover
+   crop needs, so the full contained device has room to show. */
+@media (max-width: 1024px) {
+  .product-section { flex-direction: column; height: auto; min-height: 100vh; }
+  .product-left  { width: 100%; padding: 48px 32px 32px; order: 2; }
+  .product-right { width: 100%; height: 72vw; min-height: 440px; max-height: 660px; order: 1; flex: 0 0 auto; background: #0a0a0a; }
+}
+
+/* iPad landscape — back to the split row. Must reset the min/max-height caps
+   set by the ≤1024 stack rule above, or the photo panel stays capped at 520px
+   and leaves a gap below it in the full-height row. */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  .product-section { flex-direction: row; height: 100vh; min-height: 600px; }
+  .product-left  { width: 45%; padding: clamp(24px, 5vw, 80px); order: 1; }
+  .product-right { width: 55%; height: 100%; min-height: 0; max-height: none; order: 2; flex: 1; }
+}
+
+/* Phones — tall portrait-ish box so the full device fits in the cover crop */
+@media (max-width: 767px) {
+  .product-section { flex-direction: column; height: auto; min-height: 0; }
+  .product-left  { width: 100%; padding: 32px 20px; order: 2; }
+  .product-right { width: 100%; height: 125vw; min-height: 440px; max-height: 600px; order: 1; flex: 0 0 auto; background: #0a0a0a; }
 }
 
 /* ============ ANIMATION / MICRO-INTERACTIONS ============ */

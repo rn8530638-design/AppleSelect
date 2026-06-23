@@ -21,3 +21,8 @@ npm-debug.log*
 
 # Misc
 .cache/
+.vercel
+
+# Local debug/inspection scripts & screenshots
+*.cjs
+edge_right_zoom.png

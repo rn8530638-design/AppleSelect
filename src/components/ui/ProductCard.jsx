@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
+import { useMediaQuery } from '../../hooks/useIsMobile'
 
 // A single carousel slide — split text + photo, faithful to the original .slide.
 // Reveal animations (name clip-path, specs slide-in, price count-up, photo
@@ -53,9 +54,43 @@ export default function ProductCard({ product, index, total, isActive }) {
   }
   const handleMouseLeave = () => setMousePos({ x: 0, y: 0 })
 
+  // The split panels stack vertically (photo on top, text below) on phones and
+  // portrait tablets; landscape tablets + desktop keep the split row. The actual
+  // layout (widths / heights / order) is CSS-driven via the .product-section,
+  // .product-left and .product-right classes in index.css using relative units,
+  // so the image scales continuously with the viewport. This flag only mirrors
+  // those CSS breakpoints exactly so the JS-rendered fade overlay and the image
+  // focal point match the CSS-chosen orientation.
+  const stacked = useMediaQuery(
+    '(max-width: 1024px) and (orientation: portrait), (max-width: 767px)',
+  )
+
   return (
-    <div className="slide" data-screen-label={`product-${index + 1}`}>
-      <div className="slide__text">
+    <div
+      className="slide product-section"
+      data-screen-label={`product-${index + 1}`}
+      style={{
+        // display:flex stays inline to robustly win over the base .slide `display:grid`;
+        // flex-direction / sizing / order are CSS-driven (see .product-* in index.css).
+        display: 'flex',
+        overflow: 'hidden',
+        gap: 0,
+        padding: 0,
+        margin: 0,
+        background: '#0a0a0a',
+        position: 'relative',
+      }}
+    >
+      <div
+        className="slide__text product-left"
+        style={{
+          // width / padding / order are CSS-driven (.product-left); keep only visuals.
+          background: '#0a0a0a',
+          borderRight: 'none',
+          outline: 'none',
+          boxShadow: 'none',
+        }}
+      >
         {/* Product counter (01 — 03) */}
         <div
           style={{
@@ -76,10 +111,11 @@ export default function ProductCard({ product, index, total, isActive }) {
 
         {/* Product name — clip-path word reveal */}
         <h3
+          className="product-title"
           style={{
             fontFamily: 'Syne, sans-serif',
             fontWeight: 700,
-            fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+            // font-size is CSS-driven (.product-title) so it scales per breakpoint.
             color: '#ffffff',
             letterSpacing: '-0.02em',
             lineHeight: 1.1,
@@ -154,14 +190,44 @@ export default function ProductCard({ product, index, total, isActive }) {
         </div>
       </div>
       <div
-        className="slide__photo"
+        className="slide__photo product-right"
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ border: 'none', outline: 'none', boxShadow: 'none', overflow: 'hidden' }}
+        style={{
+          // width / height / order / flex are CSS-driven (.product-right); the
+          // image inside always fills this box via position:absolute + cover, so
+          // the box's relative-unit height is what makes the photo responsive.
+          position: 'relative',
+          overflow: 'hidden',
+          background: '#0a0a0a',
+          border: 'none',
+          borderLeft: 'none',
+          outline: 'none',
+          boxShadow: 'none',
+        }}
       >
-        {/* Real product photo (slightly overscanned so parallax has no edge gaps).
-            WebP source with JPG fallback inside <picture> for older browsers. */}
-        <picture>
+        {/* Product image — zIndex 1, below the gradient overlays.
+            Slightly overscanned so parallax has no edge gaps; WebP source with
+            JPG fallback inside <picture> for older browsers. */}
+        <picture
+          style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'block',
+            overflow: 'hidden',
+            zIndex: 1,
+            // Mask the image's own edges to transparent so the panel's #0a0a0a
+            // shows through. A transparent edge cannot leak a bright pixel under
+            // sub-pixel rasterization during the swipe transform — this is what
+            // kills the 1px seam at the panel/slide boundaries. The mask lives in
+            // panel space (the <picture> is not transformed), so the inner image's
+            // parallax does not move the faded edges.
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent 0, #000 7px, #000 calc(100% - 7px), transparent 100%)',
+            maskImage:
+              'linear-gradient(to right, transparent 0, #000 7px, #000 calc(100% - 7px), transparent 100%)',
+          }}
+        >
           <source srcSet={product.image.replace(/\.jpe?g$/i, '.webp')} type="image/webp" />
           <img
             src={product.image}
@@ -171,42 +237,78 @@ export default function ProductCard({ product, index, total, isActive }) {
             decoding="async"
             style={{
               position: 'absolute',
-              inset: 0,
+              top: 0,
+              left: 0,
               width: '100%',
               height: '100%',
+              // `cover` makes the photo fill the whole panel edge-to-edge (full
+              // bleed, no empty bars). The slight scale-overscan keeps the edges
+              // covered while the parallax translate nudges the image, and avoids
+              // a 1px seam at the panel boundary during a carousel swipe.
               objectFit: 'cover',
-              objectPosition: 'center',
+              // Frame the vertical middle of the photo on every layout (not the
+              // top) so the device sits centred in the visible crop.
+              objectPosition: 'center center',
               display: 'block',
-              verticalAlign: 'bottom',
               border: 'none',
               outline: 'none',
               transform: `translate(${mousePos.x}px, ${mousePos.y}px) scale(1.06)`,
               transition: 'transform 0.3s ease-out',
-              willChange: 'transform',
             }}
           />
         </picture>
-        {/* Soft fade — left edge blends into the dark background */}
+
+        {/* Desktop only — horizontal fades. The text sits to the LEFT of the photo,
+            so the image dissolves leftward into the text panel and its right edge
+            fades to dark for a seamless swipe. On mobile the text is BELOW the photo,
+            so these are skipped in favour of the vertical fade below. */}
+        {!stacked && (
+          <>
+            {/* Left fade — dissolves the image into the left text panel (zIndex 2) */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background:
+                  'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 5%, rgba(10,10,10,0.98) 10%, rgba(10,10,10,0.92) 18%, rgba(10,10,10,0.6) 32%, rgba(10,10,10,0.2) 52%, transparent 75%)',
+                zIndex: 2,
+                pointerEvents: 'none',
+              }}
+            />
+            {/* Right-edge fade — outgoing photo meets the next dark panel seamlessly */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background:
+                  'linear-gradient(to right, transparent 0%, transparent 82%, rgba(10,10,10,0.55) 92%, #0a0a0a 100%)',
+                zIndex: 2,
+                pointerEvents: 'none',
+              }}
+            />
+          </>
+        )}
+
+        {/* Top + bottom fade (zIndex 3). Desktop: trims the photo's top/bottom edges.
+            Mobile (photo above the text): darkens under the fixed navbar and dissolves
+            the bottom of the photo into the text panel below. */}
         <div
           style={{
             position: 'absolute',
-            left: 0,
             top: 0,
+            left: 0,
             width: '100%',
             height: '100%',
-            background:
-              'linear-gradient(to right, #0a0a0a 0%, #0a0a0a 0%, rgba(10,10,10,0.99) 5%, rgba(10,10,10,0.9) 15%, rgba(10,10,10,0.5) 35%, transparent 65%)',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}
-        />
-        {/* Top + bottom fade into the dark background */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background:
-              'linear-gradient(to bottom, #0a0a0a 0%, transparent 15%, transparent 85%, #0a0a0a 100%)',
+            background: stacked
+              ? 'linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, transparent 18%, transparent 60%, rgba(10,10,10,0.85) 88%, #0a0a0a 100%)'
+              : 'linear-gradient(to bottom, #0a0a0a 0%, transparent 12%, transparent 88%, #0a0a0a 100%)',
+            zIndex: 3,
             pointerEvents: 'none',
           }}
         />

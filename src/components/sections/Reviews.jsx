@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import ReviewCard from '../ui/ReviewCard'
 import { reviews } from '../../data/content'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 28 },
@@ -9,29 +10,22 @@ const fadeInUp = {
 }
 
 export default function Reviews() {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+  const isMobile = useIsMobile()
   const outerRef = useRef(null)
   const innerRef = useRef(null)
   const posRef = useRef(0)
   const [isPaused, setIsPaused] = useState(false)
   const animationRef = useRef(null)
 
-  // Auto-scroll via rAF + transform on inner div.
-  // scrollWidth is measured once (and on resize) rather than every frame — reading
-  // a layout property inside the rAF loop forces a synchronous reflow per tick.
-  // The loop now only writes (transform), never reads layout.
+  // Auto-scroll via rAF + transform on inner div
   useEffect(() => {
     const inner = innerRef.current
     if (!inner) return
 
-    let halfWidth = inner.scrollWidth / 2
-    const measure = () => { halfWidth = inner.scrollWidth / 2 }
-    window.addEventListener('resize', measure)
-
     const scroll = () => {
       if (!isPaused) {
         posRef.current -= 0.4
-        if (-posRef.current >= halfWidth) {
+        if (-posRef.current >= inner.scrollWidth / 2) {
           posRef.current = 0
         }
         inner.style.transform = `translateX(${posRef.current}px)`
@@ -40,10 +34,7 @@ export default function Reviews() {
     }
 
     animationRef.current = requestAnimationFrame(scroll)
-    return () => {
-      window.removeEventListener('resize', measure)
-      if (animationRef.current) cancelAnimationFrame(animationRef.current)
-    }
+    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current) }
   }, [isPaused])
 
   // Mouse drag

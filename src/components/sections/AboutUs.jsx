@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import StatCard from '../ui/StatCard'
 import { stats } from '../../data/content'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const textStagger = {
   hidden: {},
@@ -24,7 +25,7 @@ const statsStagger = {
 }
 
 export default function AboutUs() {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+  const isMobile = useIsMobile()
   return (
     <section className="section about" id="about" data-screen-label="about">
       <div className="about__grid">

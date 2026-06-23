@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import Button from '../ui/Button'
 import { hero } from '../../data/content'
+import useIsMobile from '../../hooks/useIsMobile'
 
 // Eyebrow reveals letter by letter; headline words slide up; subtitle and
 // button follow. The laptop-zoom + black fade run before this, so the Hero
@@ -24,7 +25,7 @@ const wordVariants = {
 }
 
 export default function Hero() {
-  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768
+  const isMobile = useIsMobile()
   const reduce = useReducedMotion()
   const eyebrowLetters = [...hero.eyebrow]
   return (
